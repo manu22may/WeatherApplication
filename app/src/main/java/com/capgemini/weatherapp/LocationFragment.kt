@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_location.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class LocationFragment : Fragment() {
+class LocationFragment : Fragment(){
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -34,14 +35,18 @@ class LocationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        spinnerSetUp()
+
         checkPermissions()
         locationCurrentB.setOnClickListener {
             getlocation()
-            val addr=getMyAddress(loc)
+            longi= loc?.longitude?:0.0
+            lati= loc?.latitude?:0.0
+            val addr=getMyAddress(longi,lati)
             locationLattLongT.text = "LONGITUDE:${longi}\nLATTITUDE:${lati}\n$addr"
         }
 
-        citiesSpinner.adapter=ArrayAdapter<String>(activity!!,android.R.layout.simple_spinner_item,cityList)
 
         locationConfirmB.setOnClickListener {
             if(longi!=0.0 && lati!==0.0) {
@@ -58,6 +63,42 @@ class LocationFragment : Fragment() {
             }
             else{
                 Toast.makeText(activity,"Pls check location",Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+
+    private fun spinnerSetUp() {
+         val adapter=ArrayAdapter<String>(activity!!,android.R.layout.simple_spinner_item,cityList)
+        citiesSpinner.adapter=adapter
+        citiesSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when(position){
+                    0->{
+                        lati=13.067439
+                        longi=80.237617
+                    }
+                    1->{
+                        lati=19.076090
+                        longi=72.877426
+                    }
+                    2->{
+                        lati= 28.644800
+                        longi=77.216721
+                    }
+                    3->{
+                        lati=12.972442
+                        longi=77.580643
+                    }
+                    4->{
+                        lati=18.516726
+                        longi=73.856255
+                    }
+                }
+                val addr=getMyAddress(longi,lati)
+                locationLattLongT.text = "LONGITUDE:${longi}\nLATTITUDE:${lati}\n$addr"
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
     }
@@ -108,15 +149,13 @@ class LocationFragment : Fragment() {
         }
     }
 
-    private fun getMyAddress(loc: Location?): String {
+    private fun getMyAddress(longi: Double, lati: Double): String {
         var addressList= mutableListOf<Address>()
-        longi= loc?.longitude?:0.0
-        lati= loc?.latitude?:0.0
         activity?.apply {
             val gCoder= Geocoder(this)
             addressList=gCoder.getFromLocation(
-                loc?.latitude!!,
-                loc?.longitude!!,1)
+                lati,
+                longi,1)
         }
         if(addressList.isNotEmpty()){
             val addr= addressList[0] //Address class
@@ -151,4 +190,5 @@ class LocationFragment : Fragment() {
                     }
                 }
     }
+
 }
