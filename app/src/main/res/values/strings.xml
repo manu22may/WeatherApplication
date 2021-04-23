@@ -3,4 +3,5 @@
     <string name="api_key">9ff634aced5342a274e1882a50f3960f</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="test">Git test</string>
 </resources>
