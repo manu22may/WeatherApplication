@@ -30,7 +30,10 @@ class MainActivity : AppCompatActivity() {
                         displayCurrentWeather()
                         true
                     }
-                    "Hourly Forecast"->{true}
+                    "Hourly Forecast"->{
+                        displayHourlyWeather()
+                        true
+                    }
                     "Daily Forecast"->{
                         displayDailyWeather()
                         true
@@ -59,6 +62,14 @@ class MainActivity : AppCompatActivity() {
             }
 
         })*/
+    }
+
+    private fun displayHourlyWeather() {
+        val frag = HourlyWeatherFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.parentL,frag)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun changeWeatherLocation() {

@@ -15,7 +15,8 @@ data class WeatherAll(
     val lon:Double,
     val timezone:String,
     val current: CurrentWeather,
-    val daily: List<DailyWeather>
+    val daily: List<DailyWeather>,
+    val hourly: List<HourlyWeather>
 )
 
 data class DailyWeather(
@@ -23,6 +24,13 @@ data class DailyWeather(
         val temp:dailytemp,
         val weather:List<dailyweatherdetails>
 )
+data class HourlyWeather(
+    val dt :Int,
+    val temp:Double,
+    val wind_speed:Double,
+    val weather:List<dailyweatherdetails>
+)
+
 data class dailyweatherdetails(
         val main:String,
         val description:String,
